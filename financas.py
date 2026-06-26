@@ -2,22 +2,20 @@ import json
 import os
 from datetime import datetime
 
-ARQUIVO = "lancamentos.json"
+ARQUIVO_JSON = "lancamentos.json"
 ARQUIVO_TXT = "relatorio.txt"
 
-def carregar ():
+def carregar():
     if os.path.exists(ARQUIVO_JSON):
         try:
             with open(ARQUIVO_JSON, "r", encoding="utf-8") as f:
                 return json.load(f)
         except json.JSONDecodeError:
-            print(
-                "Erro ao ler o arquivo de dados. Inicializando lista vazia."
-            )
+            print("Erro ao ler o arquivo de dados. Inicializando lista vazia.")
             return []
     return []
 
-def salvar (lancamentos):
+def salvar(lancamentos):
     try:
         with open(ARQUIVO_JSON, "w", encoding="utf-8") as f:
             json.dump(lancamentos, f, indent=4, ensure_ascii=False)
@@ -60,56 +58,40 @@ def registrar_lancamento(lancamentos):
         "descricao": descricao,
     }
 
-    # Adiciona à lista e salva imediatamente
     lancamentos.append(novo_lancamento)
     salvar(lancamentos)
     print("\nMovimentação registrada e salva com sucesso!")
 
-
 def exibir_extrato(lancamentos):
-    """Percorre a lista de lançamentos e imprime cada um deles de forma organizada."""
     print("\n--- EXTRATO DETALHADO ---")
     if not lancamentos:
         print("Nenhum lançamento registrado até o momento.")
         return
 
-    print(
-        f"{'Data':<18} | {'Tipo':<8} | {'Categoria':<15} | {'Valor':<12} | Descrição"
-    )
+    print(f"{'Data':<18} | {'Tipo':<8} | {'Categoria':<15} | {'Valor':<12} | Descrição")
     print("-" * 70)
     for l in lancamentos:
         sinal = "+" if l["tipo"] == "receita" else "-"
         valor_formatado = f"{sinal} R$ {l['valor']:.2f}"
-        print(
-            f"{l['data']:<18} | {l['tipo'].capitalize():<8} | {l['categoria']:<15} | {valor_formatado:<12} | {l['descricao']}"
-        )
-
+        print(f"{l['data']:<18} | {l['tipo'].capitalize():<8} | {l['categoria']:<15} | {valor_formatado:<12} | {l['descricao']}")
 
 def calcular_saldo(lancamentos):
-    """Processa as operações matemáticas para somar receitas, despesas e consolidar o saldo líquido."""
     total_receitas = sum(l["valor"] for l in lancamentos if l["tipo"] == "receita")
     total_despesas = sum(l["valor"] for l in lancamentos if l["tipo"] == "despesa")
     saldo_total = total_receitas - total_despesas
     return total_receitas, total_despesas, saldo_total
 
-
 def gerar_relatorio(lancamentos, apenas_retornar_string=False):
-    """Exibe o breakdown (detalhamento) dos valores acumulados por cada categoria cadastrada.
-
-    Pode apenas retornar o texto formatado para reuso na exportação.
-    """
     total_receitas, total_despesas, saldo_total = calcular_saldo(lancamentos)
 
-    # Agrupamento por categoria
     categorias_resumo = {}
     for l in lancamentos:
         cat = l["categoria"]
         tipo = l["tipo"]
-        if cat not in categories_resumo:
+        if cat not in categorias_resumo:
             categorias_resumo[cat] = {"receita": 0.0, "despesa": 0.0}
         categorias_resumo[cat][tipo] += l["valor"]
 
-    # Montagem do texto do relatório
     linhas = []
     linhas.append("\n=========================================")
     linhas.append("           RESUMO FINANCEIRO             ")
@@ -139,9 +121,7 @@ def gerar_relatorio(lancamentos, apenas_retornar_string=False):
     else:
         print(texto_relatorio)
 
-
 def exportar_relatorio(lancamentos):
-    """Abre e grava as informações consolidadas do relatório dentro do arquivo relatorio.txt."""
     texto = gerar_relatorio(lancamentos, apenas_retornar_string=True)
     try:
         with open(ARQUIVO_TXT, "w", encoding="utf-8") as f:
@@ -150,9 +130,7 @@ def exportar_relatorio(lancamentos):
     except IOError:
         print("Erro ao tentar exportar o arquivo de texto.")
 
-
 def menu():
-    """Exibe o menu de opções do terminal."""
     print("\n=== APP DE FINANÇAS PESSOAIS ===")
     print("1 - REGISTRAR")
     print("2 - VER EXTRATO")
@@ -161,9 +139,7 @@ def menu():
     print("5 - SAIR")
     return input("Escolha uma opção (1-5): ").strip()
 
-
 def main():
-    # Inicialização: Carrega os dados salvos anteriormente
     lancamentos = carregar()
 
     while True:
@@ -183,7 +159,5 @@ def main():
         else:
             print("\nOpção inválida! Por favor, escolha um número de 1 a 5.")
 
-
 if __name__ == "__main__":
     main()
-

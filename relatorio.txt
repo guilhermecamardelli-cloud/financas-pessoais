@@ -1,0 +1,16 @@
+
+=========================================
+           RESUMO FINANCEIRO             
+=========================================
+Total de Receitas: R$ 2500.00
+Total de Despesas: R$ 48.00
+Saldo Total Atual: R$ 2452.00
+-----------------------------------------
+DETALHAMENTO POR CATEGORIA:
+
+Categoria: Administrativo
+  (+) Receitas: R$ 2500.00
+
+Categoria: Financeira
+  (-) Despesas: R$ 48.00
+=========================================

@@ -1,0 +1,16 @@
+[
+    {
+        "data": "26/06/2026 20:07",
+        "tipo": "receita",
+        "valor": 2500.0,
+        "categoria": "Administrativo",
+        "descricao": "receitas administrativas"
+    },
+    {
+        "data": "26/06/2026 20:07",
+        "tipo": "despesa",
+        "valor": 48.0,
+        "categoria": "Financeira",
+        "descricao": "despesas com juros"
+    }
+]
